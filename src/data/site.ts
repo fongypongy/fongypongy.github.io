@@ -109,7 +109,7 @@ export const briefs = [
 
 // ── About me ─────────────────────────────────────────────────
 export const about = {
-  portrait: { src: '/media/me/portrait.jpg', alt: 'Tristan Fong seated by a train-carriage window under a green lamp', caption: 'Tristan Fong, photographed [where / when]' },
+  portrait: { src: '/media/me/portrait.jpg', alt: 'Tristan Fong seated by a train-carriage window under a green lamp', caption: 'Tristan Fong' },
   headline: 'Why I Build Tools for Editors',
   paragraphs: [
     'My interest in creative AI started in the Army, leading a 10+ person media team through late nights in the edit suite. I kept wondering how AI could take away the boring parts of editing without taking away the creative decisions. That question became <strong>DAIdalus</strong>, the startup I co-founded.',
@@ -129,10 +129,10 @@ export const about = {
 // Leave src empty ('') to show a "photo to come" frame.
 // position = which part of the photo stays in frame (x% y%), like CSS object-position.
 export const gallery = [
-  { src: '/media/me/deck-selfie.jpg', alt: 'Selfie of Tristan with friends on an observation deck above a city and river', caption: 'Up top with the boys · [where, when]', position: '45% 70%' },
+  { src: '/media/me/deck-selfie.jpg', alt: 'Selfie of Tristan with friends on an observation deck above a city and river', caption: 'Up top with the boys', position: '45% 70%' },
   { src: '/media/me/concert.jpg', alt: 'Tristan with arms spread wide in a packed stadium before a concert', caption: "Ye live at Gelora Bung Karno, Jakarta", position: '50% 50%' },
-  { src: '/media/me/chess.jpg', alt: 'Tristan smiling down at a chessboard at a busy event', caption: 'Over a chessboard · [event]', position: '40% 50%' },
-  { src: '/media/me/pall-mall.jpg', alt: 'Tristan gesturing at the 67 Pall Mall sign', caption: 'At 67 Pall Mall · [city]', position: '72% 50%' },
+  { src: '/media/me/chess.jpg', alt: 'Tristan smiling down at a chessboard at a busy event', caption: 'Over a chessboard', position: '40% 50%' },
+  { src: '/media/me/pall-mall.jpg', alt: 'Tristan gesturing at the 67 Pall Mall sign', caption: 'At 67 Pall Mall', position: '72% 50%' },
 ];
 
 // ── Education timeline ───────────────────────────────────────
@@ -483,7 +483,6 @@ export const cases: CaseStudy[] = [
         { src: '/media/dp/parry-avenue-colour.jpg', alt: 'Colour massing render of Parry Avenue', caption: 'MASSING · COLOUR' },
         { src: '/media/dp/parry-avenue-linework.jpg', alt: 'Linework render of Parry Avenue', caption: 'MASSING · LINEWORK' },
       ] },
-      { type: 'text', label: '03 — ABBA ARENA', body: ['[Images and a line on your role to come.]'] },
     ],
     next: 'daidalus',
   },
@@ -491,7 +490,7 @@ export const cases: CaseStudy[] = [
     slug: '1d-car',
     title: '1D Car Challenge',
     headline: 'A Gear-Train Car. It Has Horns.',
-    oneLiner: "Designed and 3D printed for SUTD's Physical World module. [One line on the result.]",
+    oneLiner: "A gear-train car, designed and 3D printed for SUTD's Physical World module.",
     byline: 'Physical World · 2025',
     color: colors.mint,
     meta: 'ENGINEERING · PHYSICAL WORLD · 2025',
@@ -503,7 +502,7 @@ export const cases: CaseStudy[] = [
       { k: 'MODULE', v: 'SUTD 10.015 Physical World' },
     ],
     blocks: [
-      { type: 'text', label: '01 — THE CHALLENGE', body: ['[A line on the brief, your role in the team, and the result.]'] },
+      { type: 'text', label: '01 — THE CHALLENGE', body: ['A physics challenge for the Physical World module: design a gear-train car, model it and 3D print it, then see how it runs. Ours has horns.'] },
       { type: 'image', src: '/media/car/car.jpg', alt: 'The finished car', caption: 'THE FINISHED CAR', video: '/media/car/run.mp4' },
     ],
     next: 'daidalus',
