@@ -1,0 +1,177 @@
+---
+import { timeline } from '../data/site';
+const { start, end, clips, markers } = timeline;
+const ym = (d: number[]) => d[0] + (d[1] - 1) / 12 + ((d[2] ?? 1) - 1) / 365;
+const pct = (v: number) => (((v - start) / (end - start)) * 100).toFixed(3) + '%';
+const data = clips.map((c) => ({ ...c, a: ym(c.start), b: c.end ? ym([c.end[0], c.end[1] + 1]) : null }));
+const ticks = Array.from({ length: end - start + 1 }, (_, i) => start + i);
+const tracks = ['V3', 'V2', 'V1'];
+const labels: Record<string, string> = { V3: 'V3 · VENTURE', V2: 'V2 · WORK', V1: 'V1 · SCHOOL' };
+---
+<div class="nle" data-tl data-start={start} data-end={end}>
+  <div class="nle-bar"><span><b>SEQUENCE 01</b> · tristan_fong · {start} → {end - 1}</span><span>1 YEAR = 1 SECOND</span></div>
+  <div class="monitor">
+    <div class="screen" data-rec>
+      <img class="mon-img" data-mon-img alt="" aria-hidden="true" />
+      <div class="safe" aria-hidden="true"></div>
+      <div data-cut style="position:relative;z-index:2;display:flex;flex-direction:column;gap:10px;align-items:center">
+        <p class="now">● now showing · <span data-range></span></p>
+        <h3 data-mon-title aria-live="polite">Loading…</h3>
+        <p class="sub" data-sub></p>
+      </div>
+    </div>
+    <div class="meta">
+      <p>CLIP INFO</p>
+      <dl>
+        <dt>TRACK</dt><dd data-f="track">—</dd>
+        <dt>IN</dt><dd data-f="in">—</dd>
+        <dt>OUT</dt><dd data-f="out">—</dd>
+        <dt>DURATION</dt><dd data-f="dur">—</dd>
+        <dt>ALSO LIVE</dt><dd data-f="also">—</dd>
+      </dl>
+    </div>
+  </div>
+  <div class="ctrls">
+    <button type="button" data-act="start" aria-label="Go to start">|◂</button>
+    <button type="button" data-act="play" aria-label="Play">▶</button>
+    <button type="button" data-act="now" aria-label="Go to today">▸|</button>
+    <span class="hint">SCROLL, DRAG OR CLICK A CLIP</span>
+    <span class="tc" data-tc>0000:00:00</span>
+  </div>
+  <div class="tl-scroll">
+    <div class="tl">
+      <div class="lanes" data-lanes>
+        <div class="ruler">
+          {ticks.map((y) => <div class="tick" style={`left:${pct(y)}`}><span>'{String(y).slice(2)}</span></div>)}
+        </div>
+        <div class="lane mk"><span class="lanelabel">MARKERS</span>
+          {markers.map((m, i) => (
+            <button type="button" class="pin" style={`left:${pct(ym(m.date))};top:${i % 2 ? 19 : 3}px`} data-t={ym(m.date)} aria-label={m.label}>
+              <span class="tip">{m.label}</span>
+            </button>
+          ))}
+        </div>
+        {tracks.map((t) => (
+          <div class="lane"><span class="lanelabel">{labels[t]}</span>
+            {data.filter((c) => c.track === t).map((c) => (
+              <button type="button" class:list={['clip', t.toLowerCase()]} data-clip data-a={c.a} data-b={c.b ?? ''} data-title={c.title} data-sub={c.sub} data-track={t} data-img={(c as { image?: string }).image ?? ''}
+                style={`left:${pct(c.a)};width:calc(${pct(start + ((c.b ?? c.a + 1) - c.a))} - 2px)`}>
+                <b>{c.title}</b><i>{c.sub}</i>
+              </button>
+            ))}
+          </div>
+        ))}
+        <div class="future" data-future></div>
+        <div class="nowline" data-nowline><span>TODAY</span></div>
+        <div class="playhead" data-playhead></div>
+      </div>
+    </div>
+  </div>
+  <ol class="sr-only">
+    {data.map((c) => <li>{c.title}, {c.sub}, {c.start[1]}/{c.start[0]} to {c.end ? `${c.end[1]}/${c.end[0]}` : 'now'}</li>)}
+  </ol>
+</div>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-tl]');
+  if (root) {
+    const START = +root.dataset.start!, END = +root.dataset.end!;
+    const d = new Date();
+    const NOW = d.getFullYear() + d.getMonth() / 12 + (d.getDate() - 1) / 365;
+    const M = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+    const fmt = (t: number) => { const y = Math.floor(t + 1e-6); const m = Math.min(11, Math.floor((t - y) * 12 + 1e-6)); return M[m] + ' ' + y; };
+    const pct = (v: number) => ((v - START) / (END - START)) * 100 + '%';
+    const lanes = root.querySelector<HTMLElement>('[data-lanes]')!;
+    const ph = root.querySelector<HTMLElement>('[data-playhead]')!;
+    const clips = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-clip]')).map((el) => ({
+      el, a: +el.dataset.a!, b: el.dataset.b ? +el.dataset.b : null, title: el.dataset.title!, sub: el.dataset.sub!, track: el.dataset.track!, img: el.dataset.img || '',
+    }));
+    // ongoing clips run to today
+    clips.forEach((c) => { if (c.b === null) c.el.style.width = `calc(${((NOW - c.a) / (END - START)) * 100}% - 2px)`; });
+    root.querySelector<HTMLElement>('[data-future]')!.style.left = pct(NOW);
+    root.querySelector<HTMLElement>('[data-nowline]')!.style.left = pct(NOW);
+
+    const $ = (s: string) => root.querySelector<HTMLElement>(s)!;
+    const f = (k: string) => root.querySelector<HTMLElement>(`[data-f="${k}"]`)!;
+    let t = NOW, lastKey = '', playing = false, dragging = false, manual = false, raf = 0, last = 0;
+    let pinned: (typeof clips)[number] | null = null;
+    const end = (c: (typeof clips)[number]) => (c.b === null ? 'ONGOING' : fmt(c.b - 1 / 12));
+    const dur = (c: (typeof clips)[number]) => {
+      const m = Math.round(((c.b ?? NOW) - c.a) * 12);
+      return (m >= 12 ? Math.floor(m / 12) + 'Y ' : '') + (m % 12 ? (m % 12) + 'M' : '') + (c.b === null ? ' SO FAR' : '');
+    };
+    const sc = root.querySelector<HTMLElement>('.tl-scroll')!;
+    const follow = () => {
+      // on narrow screens the tracks scroll sideways: keep the playhead in view
+      if (sc.scrollWidth <= sc.clientWidth || dragging) return;
+      const x = ph.offsetLeft + lanes.offsetLeft;
+      if (x < sc.scrollLeft + 110 || x > sc.scrollLeft + sc.clientWidth - 40) sc.scrollLeft = x - sc.clientWidth / 2;
+    };
+    const render = () => {
+      ph.style.left = pct(t);
+      follow();
+      const live = clips.filter((c) => t >= c.a && t < (c.b ?? NOW + 0.001));
+      if (pinned && !live.includes(pinned)) pinned = null;
+      const cur = pinned ?? live.find((c) => c.track === 'V1') ?? live.slice().sort((x, y) => y.a - x.a)[0];
+      clips.forEach((c) => c.el.classList.toggle('live', live.includes(c)));
+      const yy = Math.floor(t + 1e-6), mm = Math.min(12, Math.floor((t - yy) * 12 + 1e-6) + 1);
+      const ff = Math.max(0, Math.floor(((t - yy) * 12 - (mm - 1)) * 25));
+      $('[data-tc]').textContent = `${yy}:${String(mm).padStart(2, '0')}:${String(ff).padStart(2, '0')}`;
+      const key = cur ? cur.title : 'gap';
+      if (key !== lastKey) {
+        lastKey = key;
+        $('[data-range]').textContent = cur ? `${fmt(cur.a)} – ${end(cur)}` : fmt(t);
+        $('[data-mon-title]').textContent = cur ? cur.title : 'Between clips';
+        $('[data-sub]').textContent = cur ? cur.sub : 'Nothing logged on the timeline for these months.';
+        f('track').textContent = cur ? cur.track : '—';
+        f('in').textContent = cur ? fmt(cur.a) : '—';
+        f('out').textContent = cur ? end(cur) : '—';
+        f('dur').textContent = cur ? dur(cur) : '—';
+        const mi = root.querySelector<HTMLImageElement>('[data-mon-img]')!;
+        const img = cur?.img || '';
+        if (img) { if (mi.getAttribute('src') !== img) mi.src = img; mi.classList.add('on'); } else mi.classList.remove('on');
+        const cut = $('[data-cut]'); cut.classList.remove('cut'); void cut.offsetWidth; cut.classList.add('cut');
+      }
+      f('also').textContent = live.filter((c) => c !== cur).map((c) => c.title).join(', ') || '—';
+    };
+    const set = (v: number) => { t = Math.max(START, Math.min(END, v)); render(); };
+    const playBtn = $('[data-act="play"]');
+    const stop = () => { playing = false; cancelAnimationFrame(raf); playBtn.textContent = '▶'; playBtn.setAttribute('aria-label', 'Play'); };
+    const tick = (ts: number) => {
+      const dt = last ? (ts - last) / 1000 : 0; last = ts;
+      if (t + dt >= NOW) { set(NOW); stop(); return; }
+      set(t + dt); raf = requestAnimationFrame(tick);
+    };
+    playBtn.addEventListener('click', () => {
+      if (playing) return stop();
+      if (t >= NOW - 0.01) set(START);
+      manual = true; pinned = null; playing = true; last = 0; playBtn.textContent = 'II'; playBtn.setAttribute('aria-label', 'Pause');
+      raf = requestAnimationFrame(tick);
+    });
+    $('[data-act="start"]').addEventListener('click', () => { stop(); manual = true; pinned = null; set(START); });
+    $('[data-act="now"]').addEventListener('click', () => { stop(); manual = true; pinned = null; set(NOW); });
+    clips.forEach((c) => c.el.addEventListener('click', () => { stop(); manual = true; pinned = c; set(c.a + 0.005); }));
+    root.querySelectorAll<HTMLElement>('.pin').forEach((p) => p.addEventListener('click', () => { stop(); manual = true; pinned = null; set(+p.dataset.t!); }));
+
+    const fromX = (x: number) => { const r = lanes.getBoundingClientRect(); return START + ((x - r.left) / r.width) * (END - START); };
+    lanes.addEventListener('pointerdown', (e) => {
+      if ((e.target as Element).closest('button')) return;
+      dragging = true; manual = true; pinned = null; stop(); lanes.setPointerCapture(e.pointerId); set(fromX(e.clientX));
+    });
+    lanes.addEventListener('pointermove', (e) => { if (dragging) set(fromX(e.clientX)); });
+    const up = () => { dragging = false; };
+    lanes.addEventListener('pointerup', up); lanes.addEventListener('pointercancel', up);
+
+    // scroll scrubs from the start of school to today as the section passes.
+    // Once you click, drag or play, scrolling stops moving the playhead until
+    // the timeline leaves the screen.
+    addEventListener('scroll', () => {
+      const r = root.getBoundingClientRect(), vh = innerHeight;
+      if (r.bottom < 0 || r.top > vh) { manual = false; return; }
+      if (dragging || playing || manual) return;
+      const p = (vh * 0.9 - r.top) / (r.height + vh * 0.3);
+      if (p > 0 && p < 1.1) set(START + Math.min(1, p) * (NOW - START));
+    }, { passive: true });
+    render();
+  }
+</script>

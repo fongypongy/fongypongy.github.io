@@ -1,0 +1,13 @@
+---
+// Black-and-white photo with a colour loupe that follows the mouse.
+// position: which part of the photo stays in frame when cropped (CSS object-position).
+// fit: 'contain' shows the whole image (letterboxed on black) instead of cropping it.
+interface Props { src: string; alt: string; class?: string; style?: string; eager?: boolean; rec?: boolean; position?: string; fit?: 'cover' | 'contain' }
+const { src, alt, class: cls, style, eager = false, rec = false, position, fit } = Astro.props;
+const imgStyle = [position && `object-position:${position}`, fit === 'contain' && 'object-fit:contain'].filter(Boolean).join(';') || undefined;
+const boxStyle = [style, fit === 'contain' && 'background:#000'].filter(Boolean).join(';') || undefined;
+---
+<div class:list={['photo', cls]} style={boxStyle} data-rec={rec ? '' : undefined}>
+  <img class="bw" src={src} alt={alt} style={imgStyle} loading={eager ? 'eager' : 'lazy'} decoding="async" />
+  <img class="clr" src={src} alt="" style={imgStyle} aria-hidden="true" loading="lazy" decoding="async" />
+</div>

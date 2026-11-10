@@ -1,0 +1,143 @@
+---
+import Base from '../../layouts/Base.astro';
+import Photo from '../../components/Photo.astro';
+import EditDemo from '../../components/EditDemo.astro';
+import { cases, type CaseStudy, type Block } from '../../data/site';
+
+export function getStaticPaths() {
+  return cases.map((c) => ({ params: { slug: c.slug }, props: { c } }));
+}
+const { c } = Astro.props as { c: CaseStudy };
+const next = cases.find((x) => x.slug === c.next) ?? cases[0];
+const strip = (l?: string) => (l ?? '').replace(/^\d+\s*—\s*/, '');
+const videos = c.blocks.filter((b): b is Extract<Block, { type: 'video' }> => b.type === 'video');
+const body = c.blocks.filter((b) => b.type !== 'video');
+const firstText = body.findIndex((b) => b.type === 'text');
+const kicker = c.meta.split('·').slice(0, 2).join('·').trim();
+---
+<Base
+  title={`${c.title} · Tristan Fong`}
+  description={`${c.headline}. ${c.oneLiner}`}
+  image={c.heroImage}
+  mast="WORK"
+  left={{ label: 'FRONT PAGE', href: '/#work', peek: 'Back to all the work on the front page.' }}
+  right={{ label: next.title.toUpperCase(), href: `/work/${next.slug}/`, peek: next.headline }}
+>
+  <article>
+    <div class="art-head">
+      <p class="kicker">{kicker}</p>
+      <h2>{c.headline}</h2>
+      <p class="dek">{c.oneLiner}</p>
+      <p class="byline">By Tristan Fong · {c.byline}</p>
+    </div>
+
+    <figure class="art-hero">
+      {c.heroVideo ? (
+        <div class="photo" data-rec><video src={c.heroVideo} poster={c.heroImage} autoplay muted loop playsinline aria-label={c.heroAlt} data-motion></video></div>
+      ) : (
+        <Photo src={c.heroImage} alt={c.heroAlt} fit={c.heroFit} eager rec />
+      )}
+      <figcaption class="cap">{c.heroAlt}</figcaption>
+    </figure>
+
+    <div class="art">
+      <aside class="art-left">
+        <div class="redbox">
+          <p class="kicker" style="text-align:left;margin-bottom:4px">At a glance</p>
+          <dl class="facts">{c.facts.map((f) => <div><dt>{f.k}</dt><dd>{f.v}</dd></div>)}</dl>
+        </div>
+      </aside>
+
+      <div class="art-body">
+        {body.map((b, i) => {
+          if (b.type === 'text') return (
+            <section class:list={['blk', { first: i === firstText }]}>
+              {b.label && <h3 class="sub-h">{strip(b.label)}</h3>}
+              {b.heading && <h4 class="sub-hh">{b.heading}</h4>}
+              {b.body.map((p) => <p set:html={p} />)}
+            </section>
+          );
+          if (b.type === 'list') return (
+            <section class="blk">
+              {b.label && <h3 class="sub-h">{strip(b.label)}</h3>}
+              {b.heading && <h4 class="sub-hh">{b.heading}</h4>}
+              <ul>{b.items.map((p) => <li set:html={p} />)}</ul>
+            </section>
+          );
+          if (b.type === 'image') return (
+            <figure>
+              {b.video ? (
+                <div class:list={['photo', { narrow: b.narrow }]} data-rec><video src={b.video} poster={b.src} autoplay muted loop playsinline aria-label={b.alt} data-motion></video></div>
+              ) : b.href ? (
+                <a href={b.href} target="_blank" rel="noopener" class="zoom"><Photo src={b.src} alt={b.alt} class={[b.narrow && 'narrow', b.colour && 'colour'].filter(Boolean).join(' ') || undefined} rec /></a>
+              ) : (
+                <Photo src={b.src} alt={b.alt} class={[b.narrow && 'narrow', b.colour && 'colour'].filter(Boolean).join(' ') || undefined} rec />
+              )}
+              {b.caption && <figcaption class="cap">{b.caption}</figcaption>}
+            </figure>
+          );
+          if (b.type === 'pair') return (
+            <div class="pair">
+              {b.items.map((it) => (
+                <figure>
+                  {it.video ? (
+                    <div class="photo" data-rec style="aspect-ratio:4/3"><video src={it.video} poster={it.src} autoplay muted loop playsinline aria-label={it.alt} data-motion></video></div>
+                  ) : (
+                    <Photo src={it.src} alt={it.alt} rec />
+                  )}
+                  {it.caption && <figcaption class="cap">{it.caption}</figcaption>}
+                </figure>
+              ))}
+            </div>
+          );
+          if (b.type === 'stats') return (
+            <section class="blk">
+              {b.label && <h3 class="sub-h">{strip(b.label)}</h3>}
+              {b.heading && <h4 class="sub-hh">{b.heading}</h4>}
+              <ul class="stats">{b.items.map((s) => <li><span class="v">{s.value}</span><span class="l">{s.label}</span></li>)}</ul>
+              {b.note && <p class="note">{b.note}</p>}
+            </section>
+          );
+          if (b.type === 'callout') return <blockquote class="callout">{b.text}</blockquote>;
+          if (b.type === 'demo') return <EditDemo />;
+          return null;
+        })}
+      </div>
+
+      <aside class="art-right">
+        {c.stat && <div class="side-stat"><b>{c.stat.value}</b><span>{c.stat.label}</span></div>}
+        {c.quote && (
+          <blockquote style="margin:0;padding-bottom:22px;border-bottom:1px solid var(--ink)">
+            <p class="pull" style="margin:0 0 12px;font-size:24px">{c.quote.text}</p>
+            <p class="byline red">{c.quote.by}</p>
+          </blockquote>
+        )}
+        {videos.length > 0 && (
+          <div class="side-list">
+            <p class="kicker ink">Watch</p>
+            {videos.map((v) => <a href={v.href} target="_blank" rel="noopener" data-rec>▶ {v.title ?? v.caption}</a>)}
+          </div>
+        )}
+        {c.press && (
+          <div class="side-list">
+            <p class="kicker ink">As reported</p>
+            {c.press.map((p) => <a href={p.href} target="_blank" rel="noopener"><span class="byline red">{p.outlet}</span><br />{p.headline}</a>)}
+          </div>
+        )}
+      </aside>
+    </div>
+
+    <a class="next-story" href={`/work/${next.slug}/`} data-rec>
+      <span class="kicker ink">Next in Work →</span>
+      <span class="h">{next.headline}</span>
+    </a>
+  </article>
+
+  <script>
+    try {
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelectorAll<HTMLVideoElement>('video[data-motion]').forEach((v) => { v.removeAttribute('autoplay'); v.pause(); v.controls = true; });
+      }
+    } catch {}
+  </script>
+</Base>

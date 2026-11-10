@@ -1,0 +1,224 @@
+---
+import Base from '../layouts/Base.astro';
+import Photo from '../components/Photo.astro';
+import Timeline from '../components/Timeline.astro';
+import MiniPaper from '../components/MiniPaper.astro';
+import {
+  person, cover, lead, frontStat, nowScreening, stories, briefs, about, gallery,
+  screenings, sideQuote, press, experience, classified,
+} from '../data/site';
+const bars = Array.from({ length: 36 }, (_, i) => ({ h: 4 + Math.round(Math.abs(Math.sin(i * 1.7) * 16 + Math.sin(i * 0.6) * 4)), d: ((i * 137) % 900) / 1000 }));
+---
+<Base title="Tristan Fong · films, AI & product design" home>
+
+  <!-- COVER: who this is -->
+  <section id="front" class="cover" aria-labelledby="cover-h">
+    <div class="cover-copy">
+      <div class="cover-id">
+        <div class="duo"><img src={person.portrait} alt="Portrait of Tristan Fong" /></div>
+        <ul class="roles">{cover.roles.map((r) => <li>{r}</li>)}</ul>
+      </div>
+      <h2 id="cover-h">{cover.headline}</h2>
+      <p class="dek">{cover.intro}</p>
+      <div class="btns">
+        <a class="btn ink" href="#work">SEE MY WORK →</a>
+        <a class="btn" href="#about">ABOUT ME</a>
+        <a class="btn" href="#classifieds">SAY HI</a>
+      </div>
+    </div>
+    <MiniPaper />
+  </section>
+
+  <!-- WORK -->
+  <section id="work" class="work dbl" aria-labelledby="work-h">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:22px">
+      <h2 id="work-h" class="kicker ink">The work</h2>
+      <a href="#screenings" class="byline">Films in Screenings →</a>
+    </div>
+    <div class="front">
+      <a class="story lead" href={lead.href} data-rec>
+        <figure style="margin:0">
+          <Photo src={lead.image.src} alt={lead.image.alt} style="aspect-ratio:3/2" />
+          {lead.credit && <figcaption class="cap" style="text-align:right">{lead.credit}</figcaption>}
+        </figure>
+        <p class="kicker">{lead.kicker}</p>
+        <h3 class="h-lead"><span class="ul">{lead.headline}</span></h3>
+        <p class="dek">{lead.dek}</p>
+        <p class="byline">{lead.byline} <span class="readon">· Read →</span></p>
+      </a>
+      <aside class="vr" aria-label="Sidebar">
+        <div class="redbox" style="align-items:center;text-align:center;gap:6px">
+          <p class="big-stat">{frontStat.value}</p>
+          <p class="dek" style="font-size:14px">{frontStat.label}</p>
+        </div>
+        <div class="dark">
+          <p class="byline">NOW SCREENING</p>
+          <a href={nowScreening.href} target="_blank" rel="noopener" data-rec>
+            <span class="play" aria-hidden="true">▶</span>
+            <span style="display:flex;flex-direction:column;gap:3px"><span style="font-size:17px;font-weight:600">{nowScreening.title}</span><span class="mono" style="font-size:11px;color:#A9A295">{nowScreening.meta}</span></span>
+          </a>
+          <div class="eq" aria-hidden="true">{bars.map((b) => <span style={`--h:${b.h}px;--d:-${b.d}s`}></span>)}</div>
+        </div>
+      </aside>
+    </div>
+    <div class="work-grid hr" style="padding-top:28px">
+      {stories.map((s, i) => (
+        <a class:list={['story', { vr: i > 0 }]} href={s.href} data-rec>
+          <Photo src={s.image.src} alt={s.image.alt} fit={(s.image as { fit?: "cover" | "contain" }).fit} position={(s.image as { position?: string }).position} style="aspect-ratio:4/3" />
+          <p class="kicker">{s.kicker}</p>
+          <h3 class="h-story"><span class="ul">{s.headline}</span></h3>
+          <p class="dek" style="font-size:15px">{s.dek}</p>
+          <p class="byline">{s.byline} <span class="readon">· Read →</span></p>
+        </a>
+      ))}
+      <aside class="briefs vr" aria-label="In brief">
+        <p class="kicker ink" style="padding-bottom:12px;border-bottom:3px double var(--ink)">In brief</p>
+        {briefs.map((b) => (
+          <a class="story brief" href={b.href} data-rec>
+            <div><p class="kicker">{b.kicker}</p><h4 class="h-brief"><span class="ul">{b.headline}</span></h4></div>
+            <Photo src={b.image.src} alt={b.image.alt} />
+          </a>
+        ))}
+      </aside>
+    </div>
+  </section>
+
+  <!-- ABOUT ME -->
+  <section id="about" aria-labelledby="about-h">
+    <div class="sec-head dbl">
+      <p class="kicker">The profile</p>
+      <h2 id="about-h" class="sec-title">ABOUT ME</h2>
+    </div>
+    <div class="about">
+      <figure class="about-portrait">
+        <Photo src={about.portrait.src} alt={about.portrait.alt} style="aspect-ratio:3/4" rec />
+        <figcaption class="cap">{about.portrait.caption}</figcaption>
+      </figure>
+      <div class="about-copy vr">
+        <h3 class="h-sec">{about.headline}</h3>
+        <div class="essay">{about.paragraphs.map((p) => <p set:html={p} />)}</div>
+      </div>
+      <div class="factbox vr">
+        <p class="kicker ink" style="margin-bottom:10px">Fact file</p>
+        <dl>{about.facts.map((f) => <div><dt>{f.k}</dt><dd>{f.v}</dd></div>)}</dl>
+      </div>
+    </div>
+    <div class="gallery-head hr">
+      <h3 class="kicker ink">In pictures</h3>
+    </div>
+    <ul class="gallery">
+      {gallery.map((g) => (
+        <li>
+          {g.src ? (
+            <figure><Photo src={g.src} alt={g.alt} position={g.position} style="aspect-ratio:4/5" rec /><figcaption class="cap">{g.caption}</figcaption></figure>
+          ) : (
+            <figure><div class="slot" aria-hidden="true"><span>PHOTO TO COME</span></div></figure>
+          )}
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- EDUCATION -->
+  <section id="education" style="padding-bottom:64px" aria-labelledby="edu-h">
+    <div class="sec-head dbl">
+      <p class="kicker">The timeline</p>
+      <h2 id="edu-h" class="sec-title">EDUCATION</h2>
+      <p class="dek">Scroll, drag or press play to scrub through the years. Schools on V1, work on V2, the startup on V3, milestones as markers.</p>
+    </div>
+    <Timeline />
+  </section>
+
+  <!-- SCREENINGS -->
+  <section id="screenings" class="screenings dbl" aria-labelledby="scr-h">
+    <div>
+      <p class="kicker" style="margin-bottom:6px">Listings</p>
+      <h2 id="scr-h" class="h-sec">Screenings</h2>
+      <ul class="listings">
+        {screenings.map((s) => (
+          <li>
+            {s.href ? (
+              <a class="listing" href={s.href} target="_blank" rel="noopener" data-still={s.still} data-rec>
+                <span class="mono" style="font-size:13px">{s.year}</span>
+                <span><h3 class="h-brief">{s.title}</h3><span class="dek">{s.note}</span></span>
+                <span class="byline">Watch ▶<span class="sr-only"> on YouTube</span></span>
+              </a>
+            ) : (
+              <div class="listing soon">
+                <span class="mono" style="font-size:13px">{s.year}</span>
+                <span><h3 class="h-brief">{s.title}</h3><span class="dek">{s.note}</span></span>
+                <span class="byline">Soon</span>
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+    <aside class="vr" style="padding-left:32px;display:flex;flex-direction:column;gap:18px">
+      <p class="kicker">{sideQuote.kicker}</p>
+      <blockquote class="pull">{sideQuote.text}</blockquote>
+      <p class="byline">{sideQuote.by}</p>
+      <Photo src={sideQuote.image.src} alt={sideQuote.image.alt} style="aspect-ratio:4/3" rec />
+    </aside>
+  </section>
+  <div class="float-still" aria-hidden="true" data-float><img alt="" /></div>
+
+  <!-- CLIPPINGS -->
+  <section id="clippings" class="dbl" style="padding:40px 0 56px" aria-labelledby="clip-h">
+    <p class="kicker" style="margin-bottom:6px">As reported</p>
+    <h2 id="clip-h" class="h-sec">Clippings</h2>
+    <ul class="clips">
+      {press.map((p) => (
+        <li>
+          <a class="clipping" href={p.href} target="_blank" rel="noopener">
+            <p class="kicker">{p.outlet}</p>
+            <h3 class="h-story">{p.headline}</h3>
+            <p class="byline" style="margin-top:auto">{p.cta}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <!-- APPOINTMENTS + CLASSIFIEDS -->
+  <section id="classifieds" class="duo-col dbl" aria-label="Appointments and classifieds">
+    <div>
+      <p class="kicker" style="margin-bottom:6px">Appointments</p>
+      <h2 class="h-sec">On the record</h2>
+      <dl class="appts">
+        {experience.map((e) => <div><dt>{e.when.toUpperCase()}</dt><dd><b>{e.role}</b><br /><span class="dek" style="font-size:15px">{e.org}</span></dd></div>)}
+      </dl>
+    </div>
+    <div class="vr">
+      <p class="kicker" style="margin-bottom:6px">Classifieds</p>
+      <h2 class="h-sec">Situation wanted</h2>
+      <div class="ad">
+        <p class="ad-h">{classified.heading}</p>
+        <p class="dek" style="font-size:17px;color:var(--ink)">{classified.body}</p>
+        <p class="mono" style="margin:0;font-size:13px">Reply to: {person.email}</p>
+        <div class="btns">
+          <a class="btn ink" href={`mailto:${person.email}`}>EMAIL ME →</a>
+          <a class="btn" href={person.linkedin} target="_blank" rel="noopener">LINKEDIN ↗</a>
+          {person.resume && <a class="btn" href={person.resume} download>RÉSUMÉ ↓</a>}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // TV-guide preview: a film still follows the cursor over Screenings
+    const fl = document.querySelector<HTMLElement>('[data-float]');
+    let fine = false; try { fine = matchMedia('(hover: hover) and (pointer: fine)').matches; } catch {}
+    if (fl && fine) {
+      const img = fl.querySelector('img')!;
+      document.querySelectorAll<HTMLElement>('[data-still]').forEach((a) => {
+        a.addEventListener('pointerenter', () => { img.src = a.dataset.still!; fl.classList.add('show'); });
+        a.addEventListener('pointerleave', () => fl.classList.remove('show'));
+        a.addEventListener('pointermove', (e) => {
+          const x = Math.min(e.clientX + 24, innerWidth - 280), y = Math.max(8, e.clientY - 180);
+          fl.style.transform = `translate(${x}px,${y}px)`;
+        });
+      });
+    }
+  </script>
+</Base>

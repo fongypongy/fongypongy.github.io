@@ -1,0 +1,265 @@
+---
+import '../styles/global.css';
+import { sections, person, masthead } from '../data/site';
+
+interface Edge { label: string; href: string; peek: string }
+interface Props { title: string; description?: string; home?: boolean; image?: string; mast?: string; left?: Edge; right?: Edge }
+const {
+  title,
+  description = "Tristan Fong: SUTD student, co-founder of DAIdalus, AI production intern and former Army media team lead. Films, AI and product design.",
+  home = false,
+  image = '/media/daidalus/best-shark-award.jpg',
+  mast = 'TRISTAN FONG',
+  left = { label: 'CLASSIFIEDS', href: '#classifieds', peek: sections[sections.length - 1].peek },
+  right = { label: 'WORK', href: '#work', peek: sections[1].peek },
+} = Astro.props;
+const prefix = home ? '' : '/';
+const year = new Date().getFullYear();
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL(image, Astro.site)} />
+  <meta name="theme-color" content="#EEE8DC" />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Newsreader:ital,opsz,wght@0,6..72,400..800;1,6..72,400..600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body data-home={home ? '' : undefined}>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <div class="minibar" data-minibar>
+    <div class="in">
+      <a class="mini-mast" href={home ? '#front' : '/'}>TRISTAN FONG</a>
+      <nav aria-label="Sections">
+        {sections.map((s) => <a href={`${prefix}#${s.id}`} data-sec={s.id}>{s.label}</a>)}
+        <span class="ink-bar" data-inkbar aria-hidden="true"></span>
+      </nav>
+    </div>
+    <span class="progress" data-progress aria-hidden="true"></span>
+  </div>
+
+  <div class="page">
+    <aside class="gutter">
+      <a class="edge l" href={left.href} data-edge="l">
+        <span class="arr" aria-hidden="true">↑</span>
+        <span class="lbl" data-lbl>{left.label}</span>
+        <span class="peek"><span class="kicker" data-k>{home ? 'Previous section' : 'Back to'}</span><b data-peek>{left.peek}</b></span>
+      </a>
+    </aside>
+
+    <div class="col">
+      <header>
+        <div class="topbar">
+          <a href={`${prefix}#sections`}>≡ SECTIONS</a>
+          <a class="wordmark" href={home ? '#front' : '/'}>Tristan Fong</a>
+          <span class="right">
+            <button class="btn-text" type="button" data-pen-toggle aria-pressed="true" hidden>PEN: ON</button>
+            <a class="red" href={`${prefix}#classifieds`}>SAY HI →</a>
+          </span>
+        </div>
+        {home && <p class="cover-k">THE PORTFOLIO OF</p>}
+        <h1 class="mast">{mast}{home && <span class="sr-only">: portfolio</span>}</h1>
+        <div class="dateline">
+          <span>{home ? 'PORTFOLIO' : masthead.volume} · ISSUE <span data-issue>01</span></span>
+          <span>SINGAPORE · <span data-today>{year}</span></span>
+          <span>{masthead.right}</span>
+        </div>
+        <ul id="sections" class="sections">
+          {sections.map((s) => <li><a href={`${prefix}#${s.id}`}>{s.label}</a></li>)}
+        </ul>
+      </header>
+
+      <main id="main"><slot /></main>
+
+      <footer class="site-footer">
+        <span>PRINTED IN SINGAPORE · © {year} TRISTAN FONG</span>
+        <a href={`mailto:${person.email}`}>{person.email.toUpperCase()}</a>
+        <span>END OF EDITION</span>
+      </footer>
+    </div>
+
+    <aside class="gutter r">
+      <a class="edge r" href={right.href} data-edge="r">
+        <span class="lbl" data-lbl>{right.label}</span>
+        <span class="arr" aria-hidden="true">↓</span>
+        <span class="peek"><span class="kicker" data-k>{home ? 'Next section' : 'Next story'}</span><b data-peek>{right.peek}</b></span>
+      </a>
+    </aside>
+  </div>
+
+  <canvas class="ink-trail" aria-hidden="true" data-ink></canvas>
+  <div class="pen" aria-hidden="true" data-pen>
+    <svg viewBox="0 0 12 44" width="12" height="44">
+      <rect x="2" y="0.5" width="8" height="24" rx="3.5" fill="#151413" />
+      <rect x="2" y="8" width="8" height="2" fill="#E2452B" />
+      <rect x="9" y="2" width="1.4" height="13" rx=".7" fill="#C9C2B5" />
+      <rect x="3" y="24" width="6" height="8" fill="#3B3833" />
+      <path d="M3 32 H9 L6.6 42.6 Q6 44 5.4 42.6 Z" fill="#C9A45C" stroke="#151413" stroke-width=".6" stroke-linejoin="round" />
+      <circle cx="6" cy="35.2" r=".9" fill="#151413" />
+      <path d="M6 36 V43" stroke="#151413" stroke-width=".5" />
+    </svg>
+  </div>
+  <script type="application/json" id="sections-data" set:html={JSON.stringify(sections)}></script>
+
+  <script>
+    const mq = (q: string) => { try { return matchMedia(q).matches; } catch { return false; } };
+    const fine = mq('(hover: hover) and (pointer: fine)');
+    const reduce = mq('(prefers-reduced-motion: reduce)');
+    const home = document.body.hasAttribute('data-home');
+    const secs: { id: string; label: string; peek: string }[] = JSON.parse(document.getElementById('sections-data')!.textContent!);
+
+    // dateline: the visitor's own date
+    const d = new Date();
+    const days = ['SUNDAY','MONDAY','TUESDAY','WEDNESDAY','THURSDAY','FRIDAY','SATURDAY'];
+    const months = ['JANUARY','FEBRUARY','MARCH','APRIL','MAY','JUNE','JULY','AUGUST','SEPTEMBER','OCTOBER','NOVEMBER','DECEMBER'];
+    document.querySelectorAll('[data-today]').forEach((e) => (e.textContent = `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`));
+    document.querySelectorAll('[data-issue]').forEach((e) => (e.textContent = String(d.getMonth() + 1).padStart(2, '0')));
+
+    // sticky masthead, section tracking, edge tabs, reading progress
+    const bar = document.querySelector<HTMLElement>('[data-minibar]')!;
+    const ink = document.querySelector<HTMLElement>('[data-inkbar]')!;
+    const prog = document.querySelector<HTMLElement>('[data-progress]')!;
+    const links = Array.from(bar.querySelectorAll<HTMLAnchorElement>('[data-sec]'));
+    const els = secs.map((s) => document.getElementById(s.id));
+    let cur = -1;
+    const setEdge = (side: string, s: { id: string; label: string; peek: string }) => {
+      const e = document.querySelector<HTMLAnchorElement>(`[data-edge="${side}"]`)!;
+      e.href = '#' + s.id;
+      e.querySelector('[data-lbl]')!.textContent = s.label;
+      e.querySelector('[data-peek]')!.textContent = s.peek;
+    };
+    const onScroll = () => {
+      const y = scrollY;
+      bar.classList.toggle('show', y > 260);
+      const max = document.documentElement.scrollHeight - innerHeight;
+      if (!home) prog.style.width = (max > 0 ? (y / max) * 100 : 0) + '%';
+      if (!home) return;
+      let idx = 0;
+      els.forEach((el, i) => { if (el && el.getBoundingClientRect().top < innerHeight * 0.4) idx = i; });
+      if (idx !== cur) {
+        cur = idx;
+        links.forEach((a, i) => a.classList.toggle('on', i === idx));
+        const a = links[idx];
+        ink.style.left = a.offsetLeft + 'px'; ink.style.width = a.offsetWidth + 'px';
+        setEdge('l', secs[(idx - 1 + secs.length) % secs.length]);
+        setEdge('r', secs[(idx + 1) % secs.length]);
+      }
+    };
+    addEventListener('scroll', onScroll, { passive: true });
+    addEventListener('resize', () => { cur = -1; onScroll(); });
+    onScroll();
+
+    // colour loupe on photos
+    if (fine) {
+      addEventListener('pointermove', (e) => {
+        const t = e.target as Element | null;
+        const ph = (t?.closest?.('.photo') || t?.closest?.('.story')?.querySelector('.photo')) as HTMLElement | null;
+        if (!ph) return;
+        const r = ph.getBoundingClientRect();
+        ph.style.setProperty('--mx', e.clientX - r.left + 'px');
+        ph.style.setProperty('--my', e.clientY - r.top + 'px');
+        ph.style.setProperty('--r', Math.max(90, Math.min(r.width, r.height) * 0.42) + 'px');
+      }, { passive: true });
+    }
+
+    // fountain-pen cursor: a calligraphic ink trail that dries and fades.
+    // Black ink on the page, editor's red over anything you can click.
+    const pen = document.querySelector<HTMLElement>('[data-pen]')!;
+    const cv = document.querySelector<HTMLCanvasElement>('[data-ink]')!;
+    const tog = document.querySelector<HTMLButtonElement>('[data-pen-toggle]')!;
+    if (fine && !reduce && cv.getContext) {
+      const ctx = cv.getContext('2d')!;
+      let on = true; try { on = localStorage.getItem('pen') !== 'off'; } catch {}
+      type Pt = { x: number; y: number; t: number; red: boolean; w: number };
+      let pts: Pt[] = [];
+      const blots: { x: number; y: number; t: number }[] = [];
+      let raf = 0, inside = false, hot = false;
+      const LIFE = 900;
+      const size = () => {
+        const d = Math.min(2, devicePixelRatio || 1);
+        cv.width = innerWidth * d; cv.height = innerHeight * d;
+        cv.style.width = innerWidth + 'px'; cv.style.height = innerHeight + 'px';
+        ctx.setTransform(d, 0, 0, d, 0, 0);
+      };
+      size(); addEventListener('resize', size);
+
+      const place = (x: number, y: number) => {
+        pen.style.transform = `translate(${x - 6}px, ${y - 44}px) rotate(${hot ? 24 : 36}deg)`;
+      };
+      const paint = () => {
+        tog.textContent = 'PEN: ' + (on ? 'ON' : 'OFF');
+        tog.setAttribute('aria-pressed', String(on));
+        document.documentElement.classList.toggle('pen-on', on);
+        pen.classList.toggle('show', on && inside);
+        if (!on) { pts = []; ctx.clearRect(0, 0, innerWidth, innerHeight); }
+      };
+      tog.hidden = false;
+
+      addEventListener('pointermove', (e) => {
+        if (e.pointerType !== 'mouse' || !on) return;
+        const t = performance.now();
+        const target = e.target as Element | null;
+        hot = !!target?.closest?.('a, button, [data-rec]');
+        pen.classList.toggle('hot', hot);
+        if (!inside) { inside = true; pen.classList.add('show'); }
+        place(e.clientX, e.clientY);
+        const last = pts[pts.length - 1];
+        // nib held at 45°: strokes along the nib are thin, across it thick
+        let w = 1.2;
+        if (last) {
+          const dx = e.clientX - last.x, dy = e.clientY - last.y, dist = Math.hypot(dx, dy);
+          if (dist < 1.5) return;
+          const ang = Math.atan2(dy, dx);
+          const speed = dist / Math.max(1, t - last.t);
+          w = (0.5 + 2.2 * Math.abs(Math.sin(ang - Math.PI / 4))) * Math.max(0.55, 1.15 - speed * 0.12);
+        }
+        pts.push({ x: e.clientX, y: e.clientY, t, red: hot, w });
+        if (!raf) raf = requestAnimationFrame(draw);
+      }, { passive: true });
+      document.addEventListener('pointerleave', () => { inside = false; pen.classList.remove('show'); });
+      addEventListener('pointerdown', (e) => {
+        if (e.pointerType !== 'mouse' || !on) return;
+        blots.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+        pen.classList.add('press'); setTimeout(() => pen.classList.remove('press'), 140);
+        if (!raf) raf = requestAnimationFrame(draw);
+      });
+      addEventListener('scroll', () => { pts = []; }, { passive: true }); // the page moved under the ink
+
+      function draw() {
+        const now = performance.now();
+        ctx.clearRect(0, 0, innerWidth, innerHeight);
+        pts = pts.filter((p) => now - p.t < LIFE);
+        ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+        for (let i = 1; i < pts.length; i++) {
+          const a = pts[i - 1], b = pts[i];
+          if (b.t - a.t > 120) continue; // a pause lifts the nib
+          const life = 1 - (now - b.t) / LIFE;
+          ctx.strokeStyle = b.red ? `rgba(226,69,43,${0.85 * life})` : `rgba(21,20,19,${0.55 * life})`;
+          ctx.lineWidth = b.w;
+          ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        }
+        for (let i = blots.length - 1; i >= 0; i--) {
+          const k = (now - blots[i].t) / 700;
+          if (k >= 1) { blots.splice(i, 1); continue; }
+          ctx.fillStyle = `rgba(226,69,43,${0.6 * (1 - k)})`;
+          ctx.beginPath(); ctx.arc(blots[i].x, blots[i].y, 2 + 5 * Math.sqrt(k), 0, Math.PI * 2); ctx.fill();
+        }
+        raf = pts.length || blots.length ? requestAnimationFrame(draw) : 0;
+      }
+      tog.addEventListener('click', () => {
+        on = !on; try { localStorage.setItem('pen', on ? 'on' : 'off'); } catch {}
+        paint();
+      });
+      paint();
+    }
+  </script>
+</body>
+</html>

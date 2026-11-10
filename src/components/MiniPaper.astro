@@ -1,0 +1,118 @@
+---
+// A little newspaper on the cover. Move the cursor across it to flip pages;
+// click a page to jump to that section. Arrow buttons and the contents list
+// do the same for keyboards and phones.
+import { flipbook, person } from '../data/site';
+const n = flipbook.length;
+---
+<figure class="paper" data-paper data-n={n} aria-label="A mini newspaper of this portfolio">
+  <div class="spread" data-spread>
+    <div class="book" data-book aria-hidden="true">
+      <!-- leaf 0: the cover -->
+      <div class="leaf" data-leaf="0">
+        <button class="face front mp-cover" type="button" tabindex="-1" data-open>
+          <span class="mp-k">THE PORTFOLIO OF</span>
+          <span class="mp-mast">TRISTAN<br />FONG</span>
+          <span class="mp-rule"></span>
+          <span class="mp-duo"><img src={person.portrait} alt="" loading="lazy" /></span>
+          <span class="mp-index">
+            {flipbook.map((p, i) => <span><b>{p.title}</b><i>P.{i + 2}</i></span>)}
+          </span>
+          <span class="mp-hint">FLIP ME →</span>
+        </button>
+        <a class="face back mp-photo" href={`#${flipbook[0].id}`} tabindex="-1">
+          {flipbook[0].image ? <img src={flipbook[0].image} alt="" loading="lazy" /> : <span class="mp-tl"><i></i><i></i><i></i></span>}
+          <span class="mp-cap">P.{2} · {flipbook[0].title}</span>
+        </a>
+      </div>
+      {flipbook.map((p, i) => {
+        const nx = flipbook[i + 1];
+        return (
+          <div class="leaf" data-leaf={i + 1}>
+            <a class="face front mp-page" href={`#${p.id}`} tabindex="-1">
+              <span class="mp-top"><span>TRISTAN FONG</span><span>P.{i + 2}</span></span>
+              <span class="mp-title">{p.title}</span>
+              <span class="mp-rule red"></span>
+              <span class="mp-line">{p.line}</span>
+              <span class="mp-cols" aria-hidden="true"><i></i><i></i></span>
+              <span class="mp-go">TURN TO SECTION →</span>
+            </a>
+            {nx ? (
+              <a class="face back mp-photo" href={`#${nx.id}`} tabindex="-1">
+                {nx.image ? <img src={nx.image} alt="" loading="lazy" style={(nx as { fit?: string }).fit === 'contain' ? 'object-fit:contain' : undefined} /> : <span class="mp-tl"><i></i><i></i><i></i></span>}
+                <span class="mp-cap">P.{i + 3} · {nx.title}</span>
+              </a>
+            ) : (
+              <span class="face back mp-end">
+                <span class="mp-mast">END OF<br />EDITION</span>
+                <span class="mp-line">{person.email}</span>
+              </span>
+            )}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+  <figcaption class="paper-ui">
+    <span class="paper-ctrls">
+      <button type="button" data-prev aria-label="Previous page">‹</button>
+      <span class="mono" data-pageno aria-live="polite">COVER</span>
+      <button type="button" data-next aria-label="Next page">›</button>
+    </span>
+    <span class="paper-hint">Move your cursor across the paper to flip it. Click a page to jump there.</span>
+    <nav class="paper-toc" aria-label="Contents">
+      {flipbook.map((p) => <a href={`#${p.id}`}>{p.title}</a>)}
+    </nav>
+  </figcaption>
+</figure>
+
+<script>
+  const paper = document.querySelector<HTMLElement>('[data-paper]');
+  if (paper) {
+    const n = +paper.dataset.n!;
+    const leaves = Array.from(paper.querySelectorAll<HTMLElement>('[data-leaf]'));
+    const spread = paper.querySelector<HTMLElement>('[data-spread]')!;
+    const book = paper.querySelector<HTMLElement>('[data-book]')!;
+    const label = paper.querySelector<HTMLElement>('[data-pageno]')!;
+    const titles = Array.from(paper.querySelectorAll('.paper-toc a')).map((a) => a.textContent);
+    let fine = false; try { fine = matchMedia('(hover: hover) and (pointer: fine)').matches; } catch {}
+    let page = 0; // number of leaves turned: 0 = cover, n = last section open
+
+    const show = (p: number) => {
+      page = Math.max(0, Math.min(n, p));
+      leaves.forEach((l, i) => {
+        const turned = i < page;
+        l.classList.toggle('turned', turned);
+        l.classList.toggle('top', i === page);
+        l.style.zIndex = String(turned ? i + 1 : leaves.length - i + 1);
+      });
+      // closed cover sits centred; once opened the spread is centred
+      book.style.transform = page === 0 ? 'translateX(-50%)' : 'none';
+      label.textContent = page === 0 ? 'COVER' : `P.${page + 1} · ${titles[page - 1]}`;
+    };
+    paper.querySelector('[data-prev]')!.addEventListener('click', () => show(page - 1));
+    paper.querySelector('[data-next]')!.addEventListener('click', () => show(page + 1));
+    paper.querySelector('[data-open]')!.addEventListener('click', () => show(1));
+
+    if (fine) {
+      // cursor scrubbing: right edge = cover, left edge = last page
+      spread.addEventListener('pointermove', (e) => {
+        const r = spread.getBoundingClientRect();
+        const p = (e.clientX - r.left) / r.width;
+        const target = Math.floor((1 - p) * (n + 1));
+        if (target !== page) show(target);
+      });
+    } else {
+      // swipe on phones
+      let x0 = 0, swiped = false;
+      spread.addEventListener('pointerdown', (e) => { x0 = e.clientX; swiped = false; });
+      spread.addEventListener('pointerup', (e) => {
+        const dx = e.clientX - x0;
+        if (Math.abs(dx) > 30) { swiped = true; show(page + (dx < 0 ? 1 : -1)); }
+      });
+      // a swipe shouldn't also follow the link under your finger
+      spread.addEventListener('click', (e) => { if (swiped) { e.preventDefault(); e.stopPropagation(); swiped = false; } }, true);
+    }
+    show(0);
+  }
+</script>

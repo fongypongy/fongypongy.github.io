@@ -1,0 +1,51 @@
+---
+const edits = [
+  { title: 'Trim intro dead air', detail: 'Cut 6.2s of silence and the false start before the first line.' },
+  { title: 'Open on the drone shot', detail: 'Move clip 07 (aerial, 4.1s) to the head of the timeline.' },
+  { title: 'Add transitions', detail: 'Apply 0.5s cross dissolves at all 11 cut points.' },
+];
+---
+<section class="blk" aria-labelledby="demo-h">
+  <h3 class="sub-h" id="demo-h">Interactive · You're the editor</h3>
+  <div class="demo" data-demo data-rec>
+    <p class="prompt">"Tighten the intro, open on the drone shot, and add transitions between all clips."</p>
+    <div class="tlbar" aria-hidden="true" data-timeline>{Array.from({ length: 7 }).map(() => <span></span>)}</div>
+    <p class="status" aria-live="polite" data-summary>NOTHING CHANGES UNTIL YOU SAY SO.</p>
+    {edits.map((e, i) => (
+      <div class="edit" data-edit={i} data-s="proposed">
+        <div><span class="status" data-badge>EDIT {i + 1} · PROPOSED</span><h4>{e.title}</h4><p>{e.detail}</p></div>
+        <div class="acts">
+          <button type="button" data-act="approved">APPROVE</button>
+          <button type="button" data-act="rejected">REJECT</button>
+          <button type="button" data-act="proposed" aria-label={`Revert edit ${i + 1}`}>↺</button>
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-demo]');
+  if (root) {
+    const st = ['proposed', 'proposed', 'proposed'];
+    const cards = Array.from(root.querySelectorAll<HTMLElement>('[data-edit]'));
+    const segs = Array.from(root.querySelectorAll<HTMLElement>('[data-timeline] span'));
+    const summary = root.querySelector<HTMLElement>('[data-summary]')!;
+    const on = (s: string) => s === 'approved';
+    const render = () => {
+      cards.forEach((c, i) => { c.dataset.s = st[i]; c.querySelector('[data-badge]')!.textContent = `EDIT ${i + 1} · ${st[i].toUpperCase()}`; });
+      const spec: [number, string][] = [
+        on(st[1]) ? [2, '#E2452B'] : [2, '#5A554E'],
+        on(st[0]) ? [1, '#8D867B'] : [3, '#8D867B'],
+        [4, '#EEE8DC'], [3, '#B9B2A6'], [5, '#EEE8DC'],
+        on(st[2]) ? [0.4, '#E2452B'] : [0.1, '#151413'],
+        [4, '#B9B2A6'],
+      ];
+      segs.forEach((s, i) => { s.style.flex = `${spec[i][0]} 1 0`; s.style.background = spec[i][1]; });
+      const done = st.filter((s) => s !== 'proposed').length;
+      summary.textContent = done === 0 ? 'NOTHING CHANGES UNTIL YOU SAY SO.' : `${done} OF 3 REVIEWED · ${st.filter(on).length} APPLIED · EVERY CHANGE CAN BE REVERTED`;
+    };
+    cards.forEach((c, i) => c.querySelectorAll<HTMLButtonElement>('[data-act]').forEach((b) => b.addEventListener('click', () => { st[i] = b.dataset.act!; render(); })));
+    render();
+  }
+</script>
