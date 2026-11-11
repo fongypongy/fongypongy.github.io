@@ -53,9 +53,11 @@ a { color: inherit; }
 .col { padding: 0 var(--pad); min-width: 0; }
 
 /* header */
-.topbar { display: flex; justify-content: space-between; align-items: center; gap: 16px; height: 52px; border-bottom: 1px solid var(--ink); font-family: var(--mast); font-size: 12px; font-weight: 600; letter-spacing: .12em; }
+.topbar { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; height: 52px; border-bottom: 1px solid var(--ink); font-family: var(--mast); font-size: 12px; font-weight: 600; letter-spacing: .12em; }
 .topbar a { text-decoration: none; }
-.topbar .right { display: flex; gap: 20px; align-items: center; }
+.topbar > :first-child { justify-self: start; }
+.topbar .wordmark { justify-self: center; }
+.topbar .right { display: flex; gap: 20px; align-items: center; justify-self: end; }
 .wordmark { font-family: var(--serif); font-weight: 700; font-size: 17px; letter-spacing: 0; text-decoration: none; }
 .red { color: var(--red); }
 .mast { margin: 0; padding: 22px 0 10px; text-align: center; font-family: var(--mast); font-stretch: 125%; font-weight: 900; font-size: clamp(44px, 8.6vw, 124px); line-height: .86; letter-spacing: -.025em; }
