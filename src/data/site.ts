@@ -11,7 +11,7 @@ export const person = {
   linkedin: 'https://www.linkedin.com/in/tristan-fong-566092352/',
   // Résumé button: put a PDF in /public (e.g. /public/tristan-fong-resume.pdf) and set
   // the path here, e.g. '/tristan-fong-resume.pdf'. Left empty, the button is hidden.
-  resume: '',
+  resume: '/tristan-fong-resume.pdf',
   portrait: '/media/me/portrait-duotone.jpg', // pre-graded red duotone for the "About the editor" circle (made from media/me/headshot.jpg)
 };
 
