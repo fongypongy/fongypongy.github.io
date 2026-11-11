@@ -316,6 +316,13 @@ a { color: inherit; }
 .next-story { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; margin-top: 56px; padding: 28px 0 40px; border-top: 3px double var(--ink); text-decoration: none; }
 .next-story .h { font-weight: 500; font-size: clamp(26px, 3vw, 40px); letter-spacing: -.01em; text-align: right; }
 
+/* 3D model */
+.model-fig { margin: 0; }
+.model { display: block; width: 100%; height: clamp(360px, 58vh, 600px); background: var(--paper-2); border: 1px solid var(--ink); --poster-color: var(--paper-2); --progress-bar-color: var(--red); cursor: grab; }
+.model-cap { display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.model-hint { color: var(--red); }
+.pen-on .model, .pen-on .model * { cursor: grab !important; }
+
 /* edit demo (newspaper) */
 .demo { border: 1px solid var(--ink); background: var(--paper-2); padding: 24px; display: flex; flex-direction: column; gap: 14px; }
 .demo .prompt { margin: 0 !important; font-size: 17px !important; font-style: italic; }

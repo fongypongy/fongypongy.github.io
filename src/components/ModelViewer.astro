@@ -1,0 +1,26 @@
+---
+// Interactive 3D model: drag to rotate, scroll or pinch to zoom, AR on phones.
+interface Props { src: string; poster: string; alt: string; caption?: string }
+const { src, poster, alt, caption } = Astro.props;
+---
+<figure class="model-fig">
+  <model-viewer class="model" src={src} poster={poster} alt={alt}
+    camera-controls disable-pan touch-action="pan-y" auto-rotate auto-rotate-delay="2500" rotation-per-second="18deg"
+    camera-orbit="35deg 62deg auto" min-camera-orbit="auto 5deg auto" max-camera-orbit="auto 95deg auto"
+    shadow-intensity="1" shadow-softness="0.8" exposure="0.9" tone-mapping="neutral" environment-image="neutral"
+    interaction-prompt="none" loading="lazy" reveal="auto" ar ar-modes="webxr scene-viewer quick-look">
+    <span slot="progress-bar"></span>
+    <span slot="interaction-prompt" hidden></span>
+  </model-viewer>
+  <figcaption class="cap model-cap">
+    <span>{caption}</span>
+    <span class="model-hint">DRAG TO ROTATE · SCROLL OR PINCH TO ZOOM</span>
+  </figcaption>
+</figure>
+
+<script is:inline>
+  // the Draco decoder is hosted with the site, so the model loads without third-party servers
+  self.ModelViewerElement = self.ModelViewerElement || {};
+  self.ModelViewerElement.dracoDecoderLocation = '/vendor/draco/';
+</script>
+<script is:inline type="module" src="/vendor/model-viewer.min.js"></script>

@@ -207,7 +207,8 @@ export type Block =
   | { type: 'list'; label?: string; heading?: string; items: string[] }
   | { type: 'callout'; text: string }
   | { type: 'video'; href: string; poster: string; caption: string; title?: string }
-  | { type: 'demo' };
+  | { type: 'demo' }
+  | { type: 'model'; src: string; poster: string; alt: string; caption?: string };
 
 export interface CaseStudy {
   slug: string;
@@ -373,6 +374,7 @@ export const cases: CaseStudy[] = [
       { type: 'text', label: '01 — THE IDEA', heading: 'A retreat in the highland terraces.', body: [
         'Domus Orationis is a contemplative sanctuary set in agricultural terraces: a chapel, a villa for retreatants, and a hidden adoration room carved into the slope below. Sunlit timber lattices open to the landscape above, and the underground room is kept for stillness.',
       ] },
+      { type: 'model', src: '/media/domus/domus-model.glb', poster: '/media/domus/domus-model-poster.jpg', alt: 'Interactive 3D model of the chapel, villa and pavilion on their base', caption: 'The printed model in 3D, built from the Rhino files' },
       { type: 'pair', items: [
         { src: '/media/domus/chapel-render.jpg', alt: 'Render of the chapel with a pagoda roof and Gothic body', caption: 'CHAPEL · CONCEPT RENDER' },
         { src: '/media/domus/villa-render.jpg', alt: 'Render of the villa front', caption: 'VILLA · CONCEPT RENDER' },
