@@ -273,6 +273,7 @@ a { color: inherit; }
 .art-hero .hero-media { display: inline-block; max-width: 100%; vertical-align: top; }
 .art-hero .hero-media > .bw, .art-hero .hero-media > video { display: block; width: auto; height: auto; max-width: 100%; max-height: min(78vh, 780px); object-fit: contain; }
 .art-hero .cap { text-align: left; }
+.photo.cutout { background: transparent; border: 0; }
 .art { display: grid; grid-template-columns: 250px minmax(0, 1fr) 280px; border-top: 1px solid var(--ink); }
 .art-left { padding: 24px 28px 0 0; }
 .art-left .redbox { position: sticky; top: 76px; gap: 0; }

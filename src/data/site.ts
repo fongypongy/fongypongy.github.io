@@ -224,6 +224,7 @@ export interface CaseStudy {
   heroAlt: string;
   heroVideo?: string;
   heroVideoAlt?: string; // describes the hero video (used as its caption)
+  heroCutout?: boolean; // transparent-background image: sits on the page with no frame
   heroFit?: 'cover' | 'contain'; // 'contain' shows the whole hero image instead of cropping it
   facts: { k: string; v: string }[];
   blocks: Block[];
@@ -359,8 +360,9 @@ export const cases: CaseStudy[] = [
     byline: 'CAD, Python for Grasshopper, print evaluations · 2026',
     color: colors.coral,
     meta: 'SPACE & DESIGN · GROUP PROJECT · 2026',
-    heroImage: '/media/domus/model.jpg',
-    heroAlt: '3D-printed teal chapel model on a grass site',
+    heroImage: '/media/domus/model-cutout.webp',
+    heroAlt: 'The 3D-printed teal chapel model on its grass site',
+    heroCutout: true,
     facts: [
       { k: 'MY ROLE', v: 'CAD modelling · ideation · Python for Grasshopper · print evaluations' },
       { k: 'TEAM', v: 'Class 3, Group 6: Cassidy Thng Yiheng, Poh Jun Leng, Png Wei Teng, Tristan Fong' },

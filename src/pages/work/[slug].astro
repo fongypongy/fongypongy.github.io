@@ -36,7 +36,7 @@ const kicker = c.meta.split('·').slice(0, 2).join('·').trim();
       {c.heroVideo ? (
         <div class="photo hero-media" data-rec><video src={c.heroVideo} poster={c.heroImage} autoplay muted loop playsinline aria-label={c.heroVideoAlt ?? c.heroAlt} data-motion></video></div>
       ) : (
-        <Photo src={c.heroImage} alt={c.heroAlt} class="hero-media" eager rec />
+        <Photo src={c.heroImage} alt={c.heroAlt} class={c.heroCutout ? 'hero-media cutout' : 'hero-media'} eager rec />
       )}
       <figcaption class="cap">{c.heroVideo ? (c.heroVideoAlt ?? c.heroAlt) : c.heroAlt}</figcaption>
     </figure>
