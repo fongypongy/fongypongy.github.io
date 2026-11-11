@@ -121,7 +121,9 @@ const labels: Record<string, string> = { V3: 'V3 · VENTURE', V2: 'V2 · WORK', 
       if (key !== lastKey) {
         lastKey = key;
         $('[data-range]').textContent = cur ? `${fmt(cur.a)} – ${end(cur)}` : fmt(t);
-        $('[data-mon-title]').textContent = cur ? cur.title : 'Between clips';
+        const ttl = $('[data-mon-title]');
+        ttl.textContent = cur ? cur.title : 'Between clips';
+        ttl.style.setProperty('--len', String(Math.max(12, ttl.textContent.length)));
         $('[data-sub]').textContent = cur ? cur.sub : 'Nothing logged on the timeline for these months.';
         f('track').textContent = cur ? cur.track : '—';
         f('in').textContent = cur ? fmt(cur.a) : '—';

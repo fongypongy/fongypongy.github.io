@@ -3,6 +3,7 @@ import Base from '../layouts/Base.astro';
 import Photo from '../components/Photo.astro';
 import Timeline from '../components/Timeline.astro';
 import MiniPaper from '../components/MiniPaper.astro';
+import { ratio } from '../lib/dims';
 import {
   person, cover, lead, frontStat, nowScreening, stories, briefs, about, gallery,
   screenings, sideQuote, press, experience, classified,
@@ -108,9 +109,9 @@ const bars = Array.from({ length: 36 }, (_, i) => ({ h: 4 + Math.round(Math.abs(
     </div>
     <ul class="gallery">
       {gallery.map((g) => (
-        <li>
+        <li style={`--r:${(g.src ? ratio(g.src) : 0.8).toFixed(4)}`}>
           {g.src ? (
-            <figure><Photo src={g.src} alt={g.alt} position={g.position} style="aspect-ratio:4/5" rec /><figcaption class="cap">{g.caption}</figcaption></figure>
+            <figure><Photo src={g.src} alt={g.alt} rec /><figcaption class="cap">{g.caption}</figcaption></figure>
           ) : (
             <figure><div class="slot" aria-hidden="true"><span>PHOTO TO COME</span></div></figure>
           )}
@@ -191,7 +192,7 @@ const bars = Array.from({ length: 36 }, (_, i) => ({ h: 4 + Math.round(Math.abs(
     </div>
     <div class="vr">
       <p class="kicker" style="margin-bottom:6px">Classifieds</p>
-      <h2 class="h-sec">Situation wanted</h2>
+      <h2 class="h-sec">{classified.title}</h2>
       <div class="ad">
         <p class="ad-h">{classified.heading}</p>
         <p class="dek" style="font-size:17px;color:var(--ink)">{classified.body}</p>

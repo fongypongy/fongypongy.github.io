@@ -25,13 +25,13 @@ export const masthead = {
 
 // `peek` is the preview shown when you hover a side tab.
 export const sections = [
-  { id: 'front', label: 'COVER', peek: 'Who I am, and a little newspaper to flip through.' },
-  { id: 'work', label: 'WORK', peek: 'Lead story: an AI video editor that asks before it cuts. Plus five more projects.' },
-  { id: 'about', label: 'ABOUT ME', peek: 'Who I am, why I build tools for editors, and a few favourite photos.' },
-  { id: 'education', label: 'EDUCATION', peek: 'Scrub through school, work and the startup on an edit timeline.' },
-  { id: 'screenings', label: 'SCREENINGS', peek: 'Films I directed, shot or edited.' },
-  { id: 'clippings', label: 'CLIPPINGS', peek: 'The Straits Times, Lianhe Zaobao and SUTD.' },
-  { id: 'classifieds', label: 'CLASSIFIEDS', peek: 'Situation wanted. Reply by email or LinkedIn.' },
+  { id: 'front', label: 'COVER', peek: 'Say hello, and flip through the little newspaper.' },
+  { id: 'work', label: 'WORK', peek: "The things I've made, starting with an AI video editor that asks before it cuts." },
+  { id: 'about', label: 'ABOUT ME', peek: 'The person behind the work, and a few favourite photos.' },
+  { id: 'education', label: 'EDUCATION', peek: "Scrub through where I've been, edit-timeline style." },
+  { id: 'screenings', label: 'SCREENINGS', peek: "Films I've made. Grab some popcorn." },
+  { id: 'clippings', label: 'CLIPPINGS', peek: 'A few times the papers caught up with us.' },
+  { id: 'classifieds', label: 'SAY HI', peek: 'Come say hi. My inbox is always open.' },
 ];
 
 // ── Front page ───────────────────────────────────────────────
@@ -49,19 +49,19 @@ export const lead = {
 export const cover = {
   kicker: 'The portfolio of',
   headline: "Hi, I'm Tristan. I make films, build AI tools and design things people use.",
-  intro: 'Year 2 at SUTD, studying Engineering Systems & Design with a second major in Human-Centred Domain Intelligence. Co-founder of DAIdalus, an AI video editor. AI Production Intern at Big 3 Media. Former Army media team lead.',
+  intro: "I'm in my second year at SUTD, and I like telling stories with a camera and building tools that make creative work less painful. These days that means DAIdalus, the AI video editor I co-founded, and my internship at Big 3 Media. Off the clock you'll find me playing guitar, at a concert, or losing a game of chess.",
   roles: ['Filmmaker & editor', 'AI product builder', 'Design student'],
 };
 
 // The mini newspaper on the cover. Each page links to a section of the site.
 // image: the photo on the facing (left) page when this page is open.
 export const flipbook = [
-  { id: 'work', title: 'WORK', line: 'An AI editor, Army films, a printed chapel and a wearable.', image: '/media/daidalus/zaobao-feature.jpg' },
-  { id: 'about', title: 'ABOUT ME', line: 'Who I am, why I build tools for editors, and some favourite photos.', image: '/media/me/concert.jpg' },
-  { id: 'education', title: 'EDUCATION', line: 'School, work and the startup on an edit timeline.', image: '' },
-  { id: 'screenings', title: 'SCREENINGS', line: 'Films I directed, shot or edited.', image: '/media/army/nsfoty-title.jpg', fit: 'contain' },
-  { id: 'clippings', title: 'CLIPPINGS', line: 'The Straits Times, Lianhe Zaobao and SUTD.', image: '/media/daidalus/best-shark-trophy.jpg' },
-  { id: 'classifieds', title: 'SAY HI', line: 'Open to internships and collaborations. Reply by email.', image: '/media/me/pall-mall.jpg' },
+  { id: 'work', title: 'WORK', line: "The things I've made: films, an AI video editor, a printed chapel and a wearable.", image: '/media/daidalus/sutd-booth.jpg' },
+  { id: 'about', title: 'ABOUT ME', line: 'The person behind the work: guitars, travels and a few favourite photos.', image: '/media/me/abang.jpg' },
+  { id: 'education', title: 'EDUCATION', line: "Where I've learnt, from school to SUTD, laid out on an edit timeline.", image: '/media/me/tmjc.jpg' },
+  { id: 'screenings', title: 'SCREENINGS', line: "Films I've directed, shot and edited. Grab some popcorn.", image: '/media/army/night-shoot.jpg' },
+  { id: 'clippings', title: 'CLIPPINGS', line: 'A few times the papers caught up with us.', image: '/media/daidalus/best-shark-trophy.jpg' },
+  { id: 'classifieds', title: 'SAY HI', line: 'Got a project, an idea or a good song recommendation? Come say hi.', image: '/media/me/closeup.jpg' },
 ];
 
 export const editorBox = {
@@ -92,8 +92,8 @@ export const stories = [
   },
   {
     kicker: 'Product & AI',
-    headline: 'Turn Left at the Red Building: Directions by Landmark',
-    dek: "A wearable that compares Street View with what's around you. I designed the enclosure.",
+    headline: 'Walkie-Talkie: Your Friendly Voice for a Safe Journey',
+    dek: "A wearable navigation buddy that compares Street View with what's around you. I designed the enclosure.",
     byline: 'Walkie-Talkie · 2026',
     href: '/work/walkie-talkie/',
     image: { src: '/media/walkie/context.jpg', alt: 'Render of a walker using the device in a park' },
@@ -104,7 +104,7 @@ export const stories = [
 export const briefs = [
   { kicker: 'Space & design', headline: 'My Room, Drawn, Animated and Modelled', href: '/work/ticking-away/', image: { src: '/media/room/isometric.jpg', alt: "Isometric render of Tristan's room" } },
   { kicker: 'Architecture', headline: 'Renders and Models for DP Architects', href: '/work/dp-architects/', image: { src: '/media/dp/rohini-japanese-park.jpg', alt: 'Massing render of the Rohini hub' } },
-  { kicker: 'Engineering', headline: 'A Gear-Train Car. It Has Horns.', href: '/work/1d-car/', image: { src: '/media/car/car.jpg', alt: '3D-printed car with pipe-cleaner horns' } },
+  { kicker: 'Engineering', headline: 'We Made a Wukong Car', href: '/work/1d-car/', image: { src: '/media/car/car.jpg', alt: '3D-printed car with pipe-cleaner horns' } },
 ];
 
 // ── About me ─────────────────────────────────────────────────
@@ -189,8 +189,9 @@ export const experience = [
 ];
 
 export const classified = {
-  heading: 'SUTD STUDENT SEEKS WORK.',
-  body: 'Internships and collaborations in video production, generative AI, product design and creative technology. Directs, edits, models, prototypes. English and Mandarin, conversational Cantonese.',
+  title: 'Come say hi',
+  heading: 'ALWAYS UP FOR A GOOD CHAT.',
+  body: "Whether it's a project, a collaboration, an internship, or you just want to talk films, AI or guitars, my inbox is open. I'll reply in English or Mandarin, and I can get by in Cantonese.",
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -222,6 +223,7 @@ export interface CaseStudy {
   heroImage: string;
   heroAlt: string;
   heroVideo?: string;
+  heroVideoAlt?: string; // describes the hero video (used as its caption)
   heroFit?: 'cover' | 'contain'; // 'contain' shows the whole hero image instead of cropping it
   facts: { k: string; v: string }[];
   blocks: Block[];
@@ -246,6 +248,7 @@ export const cases: CaseStudy[] = [
     heroImage: '/media/daidalus/labyrinth.jpg',
     heroAlt: 'Etched labyrinth by the sea at night, with Icarus flying overhead',
     heroVideo: '/media/daidalus/intro-loop.mp4',
+    heroVideoAlt: 'The DAIdalus intro animation: a labyrinth by the sea, then the logo',
     facts: [
       { k: 'ROLE', v: 'Co-founder · Product & Business' },
       { k: 'TIMELINE', v: 'Oct 2025 → present' },
@@ -383,21 +386,22 @@ export const cases: CaseStudy[] = [
         '<strong>Ideation</strong> on the form and the sequence from chapel to villa to adoration room.',
       ] },
       { type: 'image', src: '/media/domus/model.jpg', alt: 'Final 3D-printed model with grass, trees and figures', caption: 'THE FINAL PRINTED MODEL' },
-      { type: 'image', src: '/media/domus/presentation-board.jpg', alt: 'Domus Orationis presentation board', caption: 'PRESENTATION BOARD · GROUP 6' },
+      { type: 'image', src: '/media/domus/presentation-board.jpg', alt: 'Domus Orationis presentation board', caption: 'PRESENTATION BOARD · GROUP 6', colour: true },
     ],
     next: 'walkie-talkie',
   },
   {
     slug: 'walkie-talkie',
     title: 'Walkie-Talkie',
-    headline: 'Turn Left at the Red Building: Directions by Landmark',
-    oneLiner: 'A wearable navigation buddy for older people: it sees what you see, and tells you where to go by the landmarks around you.',
+    headline: 'Walkie-Talkie',
+    oneLiner: 'Your friendly voice for a safe journey: a wearable navigation buddy for older people that sees what you see, and tells you where to go by the landmarks around you.',
     byline: 'CAD enclosure, backend and AI pipeline · 2026',
     color: colors.sky,
     meta: 'PRODUCT & AI · WEARABLE · 2026',
     heroImage: '/media/walkie/context.jpg',
     heroAlt: 'Render of a walker using the device in a park',
     heroVideo: '/media/walkie/spin.mp4',
+    heroVideoAlt: 'The Walkie-Talkie enclosure turning under studio light',
     facts: [
       { k: 'MY ROLE', v: 'CAD enclosure design · backend, API and AI pipeline · showcase film' },
       { k: 'TEAM', v: 'Group F "Cavemen", with Alexander B., Soham and Maxwell' },
@@ -489,21 +493,46 @@ export const cases: CaseStudy[] = [
   {
     slug: '1d-car',
     title: '1D Car Challenge',
-    headline: 'A Gear-Train Car. It Has Horns.',
-    oneLiner: "A gear-train car, designed and 3D printed for SUTD's Physical World module.",
+    headline: 'We Made a Wukong Car',
+    oneLiner: "A spring-powered, gear-driven toy car, modelled in Fusion 360 and 3D printed for SUTD's Physical World module.",
     byline: 'Physical World · 2025',
     color: colors.mint,
     meta: 'ENGINEERING · PHYSICAL WORLD · 2025',
     heroImage: '/media/car/car.jpg',
     heroAlt: 'Black 3D-printed car with red and yellow pipe-cleaner horns',
     heroVideo: '/media/car/run.mp4',
+    heroVideoAlt: 'The car on a test run',
     facts: [
+      { k: 'BRIEF', v: 'A mechanically powered toy car: carry 200–400 g across a 2.5 m obstacle course in under 10 seconds' },
+      { k: 'LIMITS', v: 'Max 25 × 12 cm · no electric or chemical power · every part custom-made · S$50 budget' },
       { k: 'TOOLS', v: 'Fusion 360 · 3D printing' },
       { k: 'MODULE', v: 'SUTD 10.015 Physical World' },
     ],
     blocks: [
-      { type: 'text', label: '01 — THE CHALLENGE', body: ['A physics challenge for the Physical World module: design a gear-train car, model it and 3D print it, then see how it runs. Ours has horns.'] },
-      { type: 'image', src: '/media/car/car.jpg', alt: 'The finished car', caption: 'THE FINISHED CAR', video: '/media/car/run.mp4' },
+      { type: 'text', label: '01 — THE CHALLENGE', heading: 'Ramps, steps and gaps, powered by a spring.', body: [
+        'The Physical World brief: design and build a toy car that runs on stored mechanical energy only, then carry at least 200 g of load across a 2.5 m course of 10–15° ramps, steps up to 4 cm, gaps and bouncy patches, from rest, in under 10 seconds.',
+        'Every part had to be made by us, so there was no buying a gearbox. We made ours a Wukong car, horns and all.',
+      ] },
+      { type: 'text', label: '02 — THE GEAR TRAIN', heading: 'Getting the spring\'s energy to the wheels.', body: [
+        'The car is driven by a wound spring. A train of gears carries its energy from the spring to the wheels, so the gear sizes decide how much push the car has on a ramp and how fast it can cover the course.',
+        'I modelled the gears in Fusion 360 and checked how each pair meshed in plan before anything was printed.',
+      ] },
+      { type: 'pair', items: [
+        { src: '/media/car/gears-iso.jpg', alt: 'Fusion 360 model of the gear train: two large drive gears linked by smaller gears', caption: 'The gear train in Fusion 360' },
+        { src: '/media/car/gears-top.jpg', alt: 'Top-down view of the gear train showing how the gears mesh', caption: 'Top-down: checking the mesh' },
+      ] },
+      { type: 'pair', items: [
+        { src: '/media/car/gear-test-fit.jpg', alt: 'Hands holding the first printed gears in a line, with the coiled spring in the middle gear', caption: 'First print, test-fitted around the spring · 18 Nov 2025' },
+        { src: '/media/car/gear-a.jpg', alt: 'CAD model of Gear A with its housing and pinion', caption: 'Gear A, ready to print' },
+      ] },
+      { type: 'text', label: '03 — PRINT, TEST, REPRINT', heading: 'Four rounds of prints.', body: [
+        'The first body was a simple open box between four ring wheels. Testing it led to an improved version, and the gears, gear housing, wheel axles and fasteners were reprinted over four rounds (18, 19 and 20 November, then 2 December) as each fit was tightened.',
+      ] },
+      { type: 'pair', items: [
+        { src: '/media/car/body-v1.jpg', alt: 'First CAD model of the car body: an open box between four ring wheels', caption: 'Body, first version' },
+        { src: '/media/car/body-v2.jpg', alt: 'Improved CAD model of the car body with spoked wheels', caption: 'Body, improved' },
+      ] },
+      { type: 'image', src: '/media/car/car.jpg', alt: 'The finished black 3D-printed car with its horns', caption: 'The finished Wukong car', video: '/media/car/run.mp4', narrow: true },
     ],
     next: 'daidalus',
   },

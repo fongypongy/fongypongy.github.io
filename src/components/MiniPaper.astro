@@ -31,7 +31,7 @@ const n = flipbook.length;
           <div class="leaf" data-leaf={i + 1}>
             <a class="face front mp-page" href={`#${p.id}`} tabindex="-1">
               <span class="mp-top"><span>TRISTAN FONG</span><span>P.{i + 2}</span></span>
-              <span class="mp-title">{p.title}</span>
+              <span class="mp-title" style={`--len:${Math.max(4, p.title.length)}`}>{p.title}</span>
               <span class="mp-rule red"></span>
               <span class="mp-line">{p.line}</span>
               <span class="mp-cols" aria-hidden="true"><i></i><i></i></span>

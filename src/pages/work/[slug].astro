@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Photo from '../../components/Photo.astro';
 import EditDemo from '../../components/EditDemo.astro';
+import { ratio } from '../../lib/dims';
 import { cases, type CaseStudy, type Block } from '../../data/site';
 
 export function getStaticPaths() {
@@ -33,11 +34,11 @@ const kicker = c.meta.split('·').slice(0, 2).join('·').trim();
 
     <figure class="art-hero">
       {c.heroVideo ? (
-        <div class="photo" data-rec><video src={c.heroVideo} poster={c.heroImage} autoplay muted loop playsinline aria-label={c.heroAlt} data-motion></video></div>
+        <div class="photo hero-media" data-rec><video src={c.heroVideo} poster={c.heroImage} autoplay muted loop playsinline aria-label={c.heroVideoAlt ?? c.heroAlt} data-motion></video></div>
       ) : (
-        <Photo src={c.heroImage} alt={c.heroAlt} fit={c.heroFit} eager rec />
+        <Photo src={c.heroImage} alt={c.heroAlt} class="hero-media" eager rec />
       )}
-      <figcaption class="cap">{c.heroAlt}</figcaption>
+      <figcaption class="cap">{c.heroVideo ? (c.heroVideoAlt ?? c.heroAlt) : c.heroAlt}</figcaption>
     </figure>
 
     <div class="art">
@@ -79,9 +80,9 @@ const kicker = c.meta.split('·').slice(0, 2).join('·').trim();
           if (b.type === 'pair') return (
             <div class="pair">
               {b.items.map((it) => (
-                <figure>
+                <figure style={`--r:${ratio(it.src).toFixed(4)}`}>
                   {it.video ? (
-                    <div class="photo" data-rec style="aspect-ratio:4/3"><video src={it.video} poster={it.src} autoplay muted loop playsinline aria-label={it.alt} data-motion></video></div>
+                    <div class="photo" data-rec><video src={it.video} poster={it.src} autoplay muted loop playsinline aria-label={it.alt} data-motion></video></div>
                   ) : (
                     <Photo src={it.src} alt={it.alt} rec />
                   )}
